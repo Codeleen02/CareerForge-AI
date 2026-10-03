@@ -55,21 +55,40 @@ console.log("CLOUDINARY CONFIG CHECK:", {
           public_id: `resume_${userId}.pdf`,
           overwrite: true,
         },
-        (error, result) => {
-          if (error) {
-            console.error("CLOUDINARY ERROR:", error);
-            reject(error);
-          } else {
-            console.log("CLOUDINARY RESULT:", result);
-            resolve(result);
-          }
-        }
-      );
+    //     (error, result) => {
+    //       if (error) {
+    //         console.error("CLOUDINARY ERROR:", error);
+    //         reject(error);
+    //       } else {
+    //         console.log("CLOUDINARY RESULT:", result);
+    //         resolve(result);
+    //       }
+    //     }
+    //   );
 
-      uploadStream.end(buffer);
-    });
+    //   uploadStream.end(buffer);
+    // });
 
-    console.log("CLOUDINARY URL:", result.secure_url);
+    // console.log("CLOUDINARY URL:", result.secure_url);
+
+    (error, result) => {
+  if (error) {
+    console.error("CLOUDINARY ERROR:", error);
+    console.error(
+      "CLOUDINARY ERROR JSON:",
+      JSON.stringify(error, null, 2)
+    );
+    console.error(
+      "CLOUDINARY ERROR KEYS:",
+      Object.keys(error || {})
+    );
+
+    reject(error);
+  } else {
+    console.log("CLOUDINARY RESULT:", result);
+    resolve(result);
+  }
+}
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
