@@ -42,7 +42,11 @@ export const uploadResume = async (formData, userId) => {
     const buffer = Buffer.from(bytes);
 
     console.log("BUFFER SIZE:", buffer.length);
-
+console.log("CLOUDINARY CONFIG CHECK:", {
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  apiKeyExists: !!process.env.CLOUDINARY_API_KEY,
+  apiSecretExists: !!process.env.CLOUDINARY_API_SECRET,
+});
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
