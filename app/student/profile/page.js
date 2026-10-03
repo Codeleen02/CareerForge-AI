@@ -228,13 +228,6 @@ const ProfilePage = () => {
                   error={errors.linkedin?.message}
                   {...register("linkedin")}
                 />
-<Input
-                label="Resume"
-                placeholder="Upload your resume"
-                icon={<FileText size={18} />}
-                error={errors.resume?.message}
-                {...register("resume")}
-              />
               </div>
 
               {/* About Me */}
@@ -271,7 +264,32 @@ const ProfilePage = () => {
 
               </div>
 
+{/* Resume */}
 
+<div>
+  <label className="mb-2 block text-sm font-semibold text-slate-800">
+    Resume
+  </label>
+
+  <div className="flex items-center gap-3 rounded-lg border border-slate-300 bg-slate-50 p-3">
+    <FileText size={18} className="text-slate-400" />
+
+    {session?.user?.resume ? (
+      <a
+        href={session.user.resume}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm font-medium text-green-600 hover:underline"
+      >
+        View Resume
+      </a>
+    ) : (
+      <span className="text-sm text-slate-500">
+        No resume uploaded
+      </span>
+    )}
+  </div>
+</div>
               {/* Save Button */}
 
               <button
