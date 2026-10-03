@@ -13,6 +13,7 @@ import {
   MapPin,
   Link as LinkIcon,
   Save,
+  FileText,
 } from "lucide-react";
 
 import StudentSidebar from "@/Components/student/StudentSidebar";
