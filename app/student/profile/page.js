@@ -35,7 +35,7 @@ const ProfilePage = () => {
       linkedin: "",
       bio: "",
       skills: "",
-      resume:"",
+      resume: "",
     },
   });
 
@@ -65,7 +65,7 @@ const ProfilePage = () => {
           ? u.skills.join(", ")
           : u.skills || "",
         resume: u.resume || "",
-        
+
       });
     } catch (error) {
       console.error("Failed to fetch user:", error);
@@ -85,8 +85,8 @@ const ProfilePage = () => {
       if (!form || !session?.user?.id) {
         return;
       }
-console.log("SESSION:", session);
-console.log("USER ID:", session?.user?.id);
+      console.log("SESSION:", session);
+      console.log("USER ID:", session?.user?.id);
       const formData = new FormData(form);
 
       for (const [key, value] of formData.entries()) {
@@ -265,7 +265,13 @@ console.log("USER ID:", session?.user?.id);
 
               </div>
 
-              
+              <Input
+                label="Resume"
+                placeholder="Upload your resume"
+                icon={<FileText size={18} />}
+                error={errors.resume?.message}
+                {...register("resume")}
+              />
 
               {/* Save Button */}
 
@@ -329,11 +335,10 @@ const Input = React.forwardRef(
             type="text"
             placeholder={placeholder}
             {...props}
-            className={`w-full rounded-lg border py-2.5 pl-10 pr-3 outline-none transition focus:ring-1 ${
-              error
+            className={`w-full rounded-lg border py-2.5 pl-10 pr-3 outline-none transition focus:ring-1 ${error
                 ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                 : "border-slate-300 focus:border-green-500 focus:ring-green-500"
-            }`}
+              }`}
           />
 
         </div>
