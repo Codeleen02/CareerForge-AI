@@ -35,6 +35,7 @@ const ProfilePage = () => {
       linkedin: "",
       bio: "",
       skills: "",
+      resume:"",
     },
   });
 
@@ -63,6 +64,7 @@ const ProfilePage = () => {
         skills: Array.isArray(u.skills)
           ? u.skills.join(", ")
           : u.skills || "",
+        resume: u.resume || "",
         
       });
     } catch (error) {
