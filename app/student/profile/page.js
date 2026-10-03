@@ -228,7 +228,13 @@ const ProfilePage = () => {
                   error={errors.linkedin?.message}
                   {...register("linkedin")}
                 />
-
+<Input
+                label="Resume"
+                placeholder="Upload your resume"
+                icon={<FileText size={18} />}
+                error={errors.resume?.message}
+                {...register("resume")}
+              />
               </div>
 
               {/* About Me */}
@@ -265,13 +271,6 @@ const ProfilePage = () => {
 
               </div>
 
-              <Input
-                label="Resume"
-                placeholder="Upload your resume"
-                icon={<FileText size={18} />}
-                error={errors.resume?.message}
-                {...register("resume")}
-              />
 
               {/* Save Button */}
 
