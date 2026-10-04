@@ -89,6 +89,9 @@ console.log("CLOUDINARY CONFIG CHECK:", {
     resolve(result);
   }
 }
+      )
+      uploadStream.end(buffer)
+    })
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
@@ -114,4 +117,3 @@ console.log("CLOUDINARY CONFIG CHECK:", {
     };
   }
 };
-
