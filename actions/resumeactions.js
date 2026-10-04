@@ -51,7 +51,7 @@ console.log("CLOUDINARY CONFIG CHECK:", {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: "resumes",
-          resource_type: "raw",
+          // resource_type: "raw",
           public_id: `resume_${userId}.pdf`,
           overwrite: true,
         },
