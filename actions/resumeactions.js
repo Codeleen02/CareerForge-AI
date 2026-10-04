@@ -1,6 +1,7 @@
 "use server";
 
 import User from "@/models/User";
+import crypto from "crypto";
 import connectDb from "@/db/connectDb";
 import cloudinary from "@/lib/cloudinary";
 
@@ -16,6 +17,27 @@ export const uploadResume = async (formData, userId) => {
     console.log("FILE NAME:", file?.name);
     console.log("FILE TYPE:", file?.type);
     console.log("FILE SIZE:", file?.size);
+try {
+    const ts = Math.floor(Date.now() / 1000);
+    const signature = crypto
+      .createHash("sha1")
+      .update(`timestamp=${ts}${process.env.CLOUDINARY_API_SECRET}`)
+      .digest("hex");
+
+    const form = new FormData();
+    form.append("file", "data:text/plain;base64,aGVsbG8=");
+    form.append("api_key", process.env.CLOUDINARY_API_KEY);
+    form.append("timestamp", String(ts));
+    form.append("signature", signature);
+
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload`,
+      { method: "POST", body: form }
+    );
+    console.log("CLOUDINARY RAW TEST:", res.status, await res.text());
+  } catch (e) {
+    console.log("CLOUDINARY RAW TEST FAILED:", e);
+  }
 
     if (!userId) {
       return {
@@ -43,12 +65,10 @@ export const uploadResume = async (formData, userId) => {
 
     console.log("BUFFER SIZE:", buffer.length);
 console.log("CLOUDINARY CONFIG CHECK:", {
-  cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+  cloudName:process.env.CLOUDINARY_CLOUD_NAME,
   apiKeyExists: !!process.env.CLOUDINARY_API_KEY,
   apiSecretExists: !!process.env.CLOUDINARY_API_SECRET,
 });
-const ping = await cloudinary.api.ping();
-console.log("CLOUDINARY PING:", ping);
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
