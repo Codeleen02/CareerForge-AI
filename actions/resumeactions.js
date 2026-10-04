@@ -55,21 +55,6 @@ console.log("CLOUDINARY CONFIG CHECK:", {
           public_id: `resume_${userId}.pdf`,
           overwrite: true,
         },
-    //     (error, result) => {
-    //       if (error) {
-    //         console.error("CLOUDINARY ERROR:", error);
-    //         reject(error);
-    //       } else {
-    //         console.log("CLOUDINARY RESULT:", result);
-    //         resolve(result);
-    //       }
-    //     }
-    //   );
-
-    //   uploadStream.end(buffer);
-    // });
-
-    // console.log("CLOUDINARY URL:", result.secure_url);
 
     (error, result) => {
   if (error) {
@@ -105,7 +90,7 @@ console.log("CLOUDINARY CONFIG CHECK:", {
 
     return {
       success: true,
-      resumeUrl: result.secure_url,
+      resume: result.secure_url,
     };
 
   } catch (error) {
