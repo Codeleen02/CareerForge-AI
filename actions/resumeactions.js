@@ -54,7 +54,7 @@ console.log("CLOUDINARY PING:", ping);
         {
           folder: "resumes",
           resource_type: "raw",
-          public_id: `resume_${userId}.pdf`,
+          public_id: `resume_${userId}`,
           overwrite: true,
         },
 
