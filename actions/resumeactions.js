@@ -47,11 +47,13 @@ console.log("CLOUDINARY CONFIG CHECK:", {
   apiKeyExists: !!process.env.CLOUDINARY_API_KEY,
   apiSecretExists: !!process.env.CLOUDINARY_API_SECRET,
 });
+const ping = await cloudinary.api.ping();
+console.log("CLOUDINARY PING:", ping);
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: "resumes",
-          // resource_type: "raw",
+          resource_type: "raw",
           public_id: `resume_${userId}.pdf`,
           overwrite: true,
         },

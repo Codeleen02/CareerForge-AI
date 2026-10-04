@@ -43,9 +43,12 @@ const ResumePage = () => {
         formData,
         session.user.id
       );
+console.log("UPLOAD RESULT:", result);
 
-      console.log("UPLOAD RESULT:", result);
-      toast.success("File uploaded successfully")
+if (result?.error) {
+  toast.error(result.error);
+  return;
+}
     } catch (error) {
       console.error("Resume upload failed:", error);
     }
