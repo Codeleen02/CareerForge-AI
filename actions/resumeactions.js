@@ -79,11 +79,28 @@ console.log("CLOUDINARY PING:", ping);
       )
       uploadStream.end(buffer)
     })
-console.log("ABOUT TO SAVE RESUME URL:", result.secure_url);
+    // Add error checking for the result payload
+if (!result || !result.secure_url) {
+  console.error("Cloudinary did not return a valid secure_url:", result);
+  return {
+    success: false,
+    error: "Upload succeeded but no URL was generated",
+  };
+}
+if (!result || !result.secure_url) {
+  console.error("Cloudinary did not return a valid secure_url:", result);
+  return {
+    success: false,
+    error: "Upload succeeded but no URL was generated",
+  };
+}
+const resumeUrl = result.secure_url;
+console.log("URL TO SAVE TO MONGO:", resumeUrl);
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
-        resume: result.secure_url,
+        resume: resumeUrl,
       },
       { new: true }
     );
@@ -92,7 +109,7 @@ console.log("RESUME SAVED TO MONGODB:", updatedUser?.resume);
 
     return {
       success: true,
-      resume: result.secure_url,
+      resume: resumeUrl,
     };
 
   } catch (error) {
