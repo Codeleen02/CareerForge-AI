@@ -77,7 +77,7 @@ console.log("CLOUDINARY CONFIG CHECK:", {
       )
       uploadStream.end(buffer)
     })
-
+console.log("ABOUT TO SAVE RESUME URL:", result.secure_url);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
@@ -85,7 +85,7 @@ console.log("CLOUDINARY CONFIG CHECK:", {
       },
       { new: true }
     );
-
+console.log("RESUME SAVED TO MONGODB:", updatedUser?.resume);
     console.log("UPDATED USER:", updatedUser);
 
     return {
