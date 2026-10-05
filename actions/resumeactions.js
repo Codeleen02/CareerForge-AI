@@ -59,18 +59,18 @@ console.log("BUFFER SIZE:", buffer.length);
         },
 
     (error, result) => {
-  if (error) {
-    console.error("CLOUDINARY ERROR:", error);
-    console.error(
-      "CLOUDINARY ERROR JSON:",
-      JSON.stringify(error, null, 2)
-    );
-    console.error(
-      "CLOUDINARY ERROR KEYS:",
-      Object.keys(error || {})
-    );
+if (error) {
+  console.error("========== CLOUDINARY ERROR ==========");
+  console.error("ERROR:", error);
+  console.error("MESSAGE:", error?.message);
+  console.error("HTTP CODE:", error?.http_code);
+  console.error("NAME:", error?.name);
+  console.error("FULL ERROR:", JSON.stringify(error, null, 2));
+  console.error("ERROR KEYS:", Object.keys(error || {}));
+  console.error("RAW ERROR:", error);
+  console.error("======================================");
 
-    reject(error);
+  reject(error);
   } else {
     console.log("CLOUDINARY RESULT:", result);
     resolve(result);
