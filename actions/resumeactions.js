@@ -7,6 +7,18 @@ import cloudinary from "@/lib/cloudinary";
 export const uploadResume = async (formData, userId) => {
   try {
     await connectDb();
+    try {
+  const ping = await cloudinary.api.ping();
+  console.log("========== CLOUDINARY PING ==========");
+  console.log("PING RESULT:", ping);
+  console.log("======================================");
+} catch (error) {
+  console.error("========== CLOUDINARY PING FAILED ==========");
+  console.error(error);
+  console.error("MESSAGE:", error?.message);
+  console.error("HTTP CODE:", error?.http_code);
+  console.error("=============================================");
+}
 
     console.log("USER ID:", userId);
 
