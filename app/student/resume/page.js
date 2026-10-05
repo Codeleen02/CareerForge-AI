@@ -44,6 +44,9 @@ const ResumePage = () => {
         session.user.id
       );
 console.log("UPLOAD RESULT:", result);
+ if(result?.success){
+   toast.success("Profile updated successfully!");
+ }
 
 if (result?.error) {
   toast.error(result.error);
