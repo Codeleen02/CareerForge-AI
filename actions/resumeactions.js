@@ -48,7 +48,25 @@ console.log("CLOUDINARY CONFIG CHECK:", {
   apiSecretExists: !!process.env.CLOUDINARY_API_SECRET,
 });
 console.log("BUFFER SIZE:", buffer.length);
+try {
+  const testResponse = await fetch(
+    `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload`,
+    {
+      method: "POST",
+    }
+  );
 
+  console.log("DIRECT CLOUDINARY STATUS:", testResponse.status);
+  console.log(
+    "DIRECT CLOUDINARY X-CLD-ERROR:",
+    testResponse.headers.get("X-Cld-Error")
+  );
+
+  const testText = await testResponse.text();
+  console.log("DIRECT CLOUDINARY BODY:", testText);
+} catch (e) {
+  console.error("DIRECT CLOUDINARY TEST FAILED:", e);
+}
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
