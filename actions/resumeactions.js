@@ -229,55 +229,153 @@ export const uploadResume = async (formData, userId) => {
     // -----------------------------------------
     console.log("🔥 STARTING CLOUDINARY UPLOAD");
 
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "resumes",
-          resource_type: "raw",
-          public_id: `resume_${userId}`,
-          overwrite: true,
-        },
-        (error, result) => {
-          if (error) {
-            console.error(
-              "========== CLOUDINARY UPLOAD ERROR =========="
-            );
+    // const result = await new Promise((resolve, reject) => {
+    //   const uploadStream = cloudinary.uploader.upload_stream(
+    //     {
+    //       folder: "resumes",
+    //       resource_type: "raw",
+    //       public_id: `resume_${userId}`,
+    //       overwrite: true,
+    //     },
+    //     (error, result) => {
+    //       if (error) {
+    //         console.error(
+    //           "========== CLOUDINARY UPLOAD ERROR =========="
+    //         );
 
-            console.error("ERROR:", error);
-            console.error("MESSAGE:", error?.message);
-            console.error("HTTP CODE:", error?.http_code);
-            console.error("NAME:", error?.name);
+    //         console.error("ERROR:", error);
+    //         console.error("MESSAGE:", error?.message);
+    //         console.error("HTTP CODE:", error?.http_code);
+    //         console.error("NAME:", error?.name);
 
-            console.error(
-              "FULL ERROR:",
-              JSON.stringify(error, null, 2)
-            );
+    //         console.error(
+    //           "FULL ERROR:",
+    //           JSON.stringify(error, null, 2)
+    //         );
 
-            console.error(
-              "ERROR KEYS:",
-              Object.keys(error || {})
-            );
+    //         console.error(
+    //           "ERROR KEYS:",
+    //           Object.keys(error || {})
+    //         );
 
-            console.error(
-              "==============================================="
-            );
+    //         console.error(
+    //           "==============================================="
+    //         );
 
-            reject(error);
-            return;
-          }
+    //         reject(error);
+    //         return;
+    //       }
 
-          console.log(
-            "🔥 CLOUDINARY UPLOAD SUCCESS:",
-            result
-          );
+    //       console.log(
+    //         "🔥 CLOUDINARY UPLOAD SUCCESS:",
+    //         result
+    //       );
 
-          resolve(result);
-        }
-      );
+    //       resolve(result);
+    //     }
+    //   );
 
-      uploadStream.end(buffer);
-    });
+    //   uploadStream.end(buffer);
+    // });
+console.log("🔥🔥🔥 STARTING DIRECT CLOUDINARY TEST 🔥🔥🔥");
 
+try {
+  const timestamp = Math.floor(Date.now() / 1000);
+
+  const paramsToSign = {
+    folder: "resumes",
+    public_id: `resume_${userId}`,
+    timestamp,
+  };
+
+  const signature = cloudinary.utils.api_sign_request(
+    paramsToSign,
+    process.env.CLOUDINARY_API_SECRET
+  );
+
+  const cloudinaryForm = new FormData();
+
+  cloudinaryForm.append(
+    "file",
+    new Blob([buffer], { type: "application/pdf" }),
+    file.name
+  );
+
+  cloudinaryForm.append(
+    "api_key",
+    process.env.CLOUDINARY_API_KEY
+  );
+
+  cloudinaryForm.append(
+    "timestamp",
+    timestamp.toString()
+  );
+
+  cloudinaryForm.append(
+    "folder",
+    "resumes"
+  );
+
+  cloudinaryForm.append(
+    "public_id",
+    `resume_${userId}`
+  );
+
+  cloudinaryForm.append(
+    "signature",
+    signature
+  );
+
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload`,
+    {
+      method: "POST",
+      body: cloudinaryForm,
+    }
+  );
+
+  console.log("🔥 CLOUDINARY STATUS:", response.status);
+  console.log(
+    "🔥 CLOUDINARY X-CLD-ERROR:",
+    response.headers.get("x-cld-error")
+  );
+
+  const responseText = await response.text();
+
+  console.log("🔥 CLOUDINARY RAW RESPONSE:", responseText);
+
+  if (!response.ok) {
+    return {
+      success: false,
+      error: `Cloudinary ${response.status}: ${responseText}`,
+    };
+  }
+
+  const result = JSON.parse(responseText);
+
+  console.log("🔥 CLOUDINARY SUCCESS:", result);
+
+  const resumeUrl = result.secure_url;
+
+  await User.findByIdAndUpdate(
+    userId,
+    { resume: resumeUrl },
+    { new: true }
+  );
+
+  return {
+    success: true,
+    resume: resumeUrl,
+  };
+
+} catch (error) {
+  console.error("🔥 DIRECT CLOUDINARY TEST ERROR:", error);
+
+  return {
+    success: false,
+    error: error?.message || "Cloudinary upload failed",
+  };
+}
     // -----------------------------------------
     // 9. Validate Cloudinary result
     // -----------------------------------------
